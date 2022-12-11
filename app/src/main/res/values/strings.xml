@@ -1,0 +1,7 @@
+<resources>
+    <string name="app_name">TestAppSubtotal</string>
+    <string name="book_image">Book\'s image</string>
+    <string name="author">Author</string>
+    <string name="title">Title</string>
+    <string name="check_the_connection">Please, check your internet connection</string>
+</resources>
