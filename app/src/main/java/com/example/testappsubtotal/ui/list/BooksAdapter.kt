@@ -1,54 +1,53 @@
 package com.example.testappsubtotal.ui.list
 
+import android.util.Log
 import android.view.LayoutInflater
 import android.view.ViewGroup
-import androidx.paging.PagingDataAdapter
-import androidx.recyclerview.widget.DiffUtil
 import androidx.recyclerview.widget.RecyclerView
-import com.bumptech.glide.Glide
+import coil.load
 import com.example.testappsubtotal.databinding.ItemBookBinding
-import com.example.testappsubtotal.model.Books
+import com.example.testappsubtotal.model.Items
 
-class BooksAdapter(private val bookClickListener: (bookItem: Books) -> Unit) :
-    PagingDataAdapter<Books, BooksAdapter.ViewHolder>(DiffUtilCallBack) {
+class BooksAdapter(
+    private val bookClickListener: (bookItem: Items) -> Unit
+) : RecyclerView.Adapter<BooksAdapter.ViewHolder>() {
+    private var list: MutableList<Items> = mutableListOf()
+
+    fun setData(data: List<Items>) {
+        list.clear()
+        list.addAll(data)
+        notifyDataSetChanged()
+    }
+
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): ViewHolder {
         val binding = ItemBookBinding.inflate(LayoutInflater.from(parent.context), parent, false)
         return ViewHolder(binding)
     }
 
     override fun onBindViewHolder(holder: ViewHolder, position: Int) {
-        getItem(position)?.let {
-            holder.bind(it, position)
-        }
+        holder.bind(list[position])
     }
 
-    inner class ViewHolder(private val binding: ItemBookBinding) : RecyclerView.ViewHolder(binding.root) {
+    inner class ViewHolder(private val binding: ItemBookBinding) :
+        RecyclerView.ViewHolder(binding.root) {
 
-        init {
-            binding.root.setOnClickListener {
-                val bookItem = getItem(bindingAdapterPosition)
-                bookItem?.let { bookClickListener(it) }
-            }
-        }
-
-        fun bind(response: Books, position: Int) {
+        fun bind(response: Items) {
             with(binding) {
-                tvAuthor.text = response.items[position].volumeInfo?.authors.toString()
-                tvDate.text = response.items[position].volumeInfo?.publishedDate
-                tvDescription.text = response.items[position].volumeInfo?.description
-                tvTitle.text = response.items[position].volumeInfo?.title
-                Glide.with(ivBook).load(response.items[position].volumeInfo?.imageLinks?.thumbnail).into(ivBook)
+                val authors = response.volumeInfo?.authors ?: listOf()
+                tvAuthor.text = if (authors.isNotEmpty()) authors[0] else "No authors found"
+                tvDate.text = response.volumeInfo?.publishedDate
+                tvDescription.text = response.volumeInfo?.description
+                tvTitle.text = response.volumeInfo?.title
+                val imageLink = response.volumeInfo?.imageLinks?.thumbnail
+                ivBook.load(imageLink)
+                Log.d("develop", "link: $imageLink")
+                clContainer.setOnClickListener {
+                    Log.d("develop", "item: ${binding.tvTitle.text}")
+                    bookClickListener(response)
+                }
             }
         }
     }
 
-    object DiffUtilCallBack : DiffUtil.ItemCallback<Books>() {
-        override fun areItemsTheSame(oldItem: Books, newItem: Books): Boolean {
-            return oldItem.items == newItem.items
-        }
-
-        override fun areContentsTheSame(oldItem: Books, newItem: Books): Boolean {
-            return oldItem == newItem
-        }
-    }
+    override fun getItemCount() = list.size
 }

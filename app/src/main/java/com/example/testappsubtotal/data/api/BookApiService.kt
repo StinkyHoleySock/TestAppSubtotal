@@ -9,17 +9,15 @@ import retrofit2.http.Query
 
 interface BookApiService {
 
-    @GET("books/v1/volumes?q={query}+{filter}:keyes")
+    @GET(" ")
     suspend fun getBooksInfo(
-        @Path("query") query: String,
-        @Path("filter") filter: String,
-        @Query("startIndex") startIndex: Int = 0,
-        @Query("maxResults") maxResults: Int = 10,
+        @Query("q") q: String,
         @Query("key") key: String,
-    ): Response<BooksInfoResult>
+//        @Path("filter") filter: String,
+    ): Response<Books>
 
 
-    @GET("books/v1/volumes/{id}")
+    @GET("{id}")
     suspend fun getOneBookInfo(
         @Path("id") query: String,
         @Query("key") key: String,

@@ -1,10 +1,9 @@
 package com.example.testappsubtotal.data.repository
 
-import androidx.lifecycle.LiveData
-import androidx.paging.PagingData
 import com.example.testappsubtotal.model.Books
+import retrofit2.Response
 
 interface BooksRepository {
-    suspend fun getBooksList(): LiveData<PagingData<Books>>
+    suspend fun getBooksList(): Response<Books>
 }
 

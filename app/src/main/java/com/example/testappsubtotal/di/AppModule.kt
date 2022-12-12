@@ -7,6 +7,7 @@ import dagger.Provides
 import dagger.hilt.InstallIn
 import dagger.hilt.components.SingletonComponent
 import retrofit2.Retrofit
+import retrofit2.converter.gson.GsonConverterFactory
 import javax.inject.Singleton
 
 @Module
@@ -17,7 +18,8 @@ object AppModule {
     @Singleton
     fun provideApi(): BookApiService {
         return Retrofit.Builder()
-            .baseUrl("https://www.googleapis.com")
+            .baseUrl("https://www.googleapis.com/books/v1/volumes/")
+            .addConverterFactory(GsonConverterFactory.create())
             .build()
             .create(BookApiService::class.java)
     }

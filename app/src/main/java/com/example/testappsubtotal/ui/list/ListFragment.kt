@@ -14,6 +14,7 @@ import androidx.navigation.fragment.findNavController
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.example.testappsubtotal.R
 import com.example.testappsubtotal.databinding.FragmentListBinding
+import com.example.testappsubtotal.model.Books
 import dagger.hilt.android.AndroidEntryPoint
 import kotlinx.coroutines.launch
 
@@ -23,8 +24,8 @@ class ListFragment : Fragment(R.layout.fragment_list) {
     private val binding: FragmentListBinding get() = _binding!!
     lateinit var viewModel: ListViewModel
     private val booksAdapter by lazy {
-        BooksAdapter {
-            navigateToBooksDetails(id = "")
+        BooksAdapter() {
+            navigateToBooksDetails()
         }
     }
 
@@ -33,7 +34,7 @@ class ListFragment : Fragment(R.layout.fragment_list) {
         viewModel = ViewModelProvider(requireActivity())[ListViewModel::class.java]
         _binding = FragmentListBinding.bind(view)
         initView()
-        initObservers()
+        subscribeUi()
     }
 
     private fun initView() {
@@ -46,25 +47,21 @@ class ListFragment : Fragment(R.layout.fragment_list) {
         }
     }
 
-    private fun initObservers() {
-        viewLifecycleOwner.lifecycleScope.launch {
-            viewModel.getBooksList().observe(viewLifecycleOwner) {
-                booksAdapter.submitData(lifecycle, it)
-                Log.d("develop", "1")
-                Log.d("develop", "adapter: ${booksAdapter.snapshot().items}")
-            }
-        }
-    }
 
     private fun subscribeUi() {
         viewModel.bookList.observe(viewLifecycleOwner) {
-            Log.d("develop", "list: $it")
+            booksAdapter.setData(it.items)
+            Log.d("develop", "list: ${it.items.size}")
+        }
+
+        viewModel.isLoading.observe(viewLifecycleOwner) { isLoading ->
+            Log.d("develop", "isLoading: $isLoading")
+            if (isLoading) binding.progressCircular.visibility =
+                View.VISIBLE else binding.progressCircular.visibility = View.GONE
         }
     }
 
-    private fun navigateToBooksDetails(id: String) {
+    private fun navigateToBooksDetails() {
         findNavController().navigate(R.id.action_listFragment_to_detailsFragment)
     }
-
-
 }

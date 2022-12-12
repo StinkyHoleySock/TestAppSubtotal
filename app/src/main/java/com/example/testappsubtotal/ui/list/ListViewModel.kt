@@ -1,5 +1,6 @@
 package com.example.testappsubtotal.ui.list
 
+import android.util.Log
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
@@ -9,18 +10,28 @@ import androidx.paging.cachedIn
 import com.example.testappsubtotal.data.repository.BooksRepositoryImpl
 import com.example.testappsubtotal.model.Books
 import dagger.hilt.android.lifecycle.HiltViewModel
+import kotlinx.coroutines.launch
 import javax.inject.Inject
 
 @HiltViewModel
 class ListViewModel @Inject constructor(private val repository: BooksRepositoryImpl) : ViewModel() {
 
-    private val _booksList = MutableLiveData<PagingData<Books>>()
-    val bookList: LiveData<PagingData<Books>> get() = _booksList
+    private val _booksList = MutableLiveData<Books>()
+    val bookList: LiveData<Books> get() = _booksList
+    private val _isLoading = MutableLiveData<Boolean>()
+    val isLoading: LiveData<Boolean> get() = _isLoading
 
-    suspend fun getBooksList(): LiveData<PagingData<Books>> {
-        val response = repository.getBooksList().cachedIn(viewModelScope)
-        _booksList.value = response.value
-        return response
+    init {
+        Log.d("develop", "init")
+        getBooksList()
     }
 
+    private fun getBooksList() {
+        viewModelScope.launch {
+            _isLoading.value = true
+            val response = repository.getBooksList()
+            _booksList.value = response.body()
+        }
+        _isLoading.value = false
+    }
 }

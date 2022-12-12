@@ -8,6 +8,7 @@ import androidx.paging.PagingData
 import androidx.paging.liveData
 import com.example.testappsubtotal.data.api.BookApiService
 import com.example.testappsubtotal.model.Books
+import retrofit2.Response
 import javax.inject.Inject
 
 class BooksRepositoryImpl @Inject constructor(
@@ -18,15 +19,10 @@ class BooksRepositoryImpl @Inject constructor(
         Log.d("develop", "repo: ${service.toString()}")
     }
 
-    override suspend fun getBooksList(): LiveData<PagingData<Books>> {
-        return Pager(
-            config = PagingConfig(
-                pageSize = 40,
-                enablePlaceholders = false
-            ),
-            pagingSourceFactory = {
-                BookDataSource(service)
-            }
-        ).liveData
+    override suspend fun getBooksList(): Response<Books> {
+        return service.getBooksInfo(
+            q = "flower",
+            key = BookDataSource.API_KEY
+        )
     }
 }
