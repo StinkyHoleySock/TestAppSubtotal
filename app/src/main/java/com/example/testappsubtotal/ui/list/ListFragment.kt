@@ -5,6 +5,7 @@ import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import android.widget.SearchView
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.viewModels
 import androidx.hilt.navigation.compose.hiltViewModel
@@ -34,6 +35,7 @@ class ListFragment : Fragment(R.layout.fragment_list) {
         viewModel = ViewModelProvider(requireActivity())[ListViewModel::class.java]
         _binding = FragmentListBinding.bind(view)
         initView()
+        initSearchView()
         subscribeUi()
     }
 
@@ -47,11 +49,23 @@ class ListFragment : Fragment(R.layout.fragment_list) {
         }
     }
 
+    private fun initSearchView() {
+        binding.search.setOnQueryTextListener(object : SearchView.OnQueryTextListener,
+            androidx.appcompat.widget.SearchView.OnQueryTextListener {
+            override fun onQueryTextSubmit(query: String): Boolean {
+                viewModel.getBooksList(query)
+                return false
+            }
+            override fun onQueryTextChange(newText: String): Boolean {
+                viewModel.getBooksList(newText)
+                return false
+            }
+        })
+    }
 
     private fun subscribeUi() {
         viewModel.bookList.observe(viewLifecycleOwner) {
             booksAdapter.setData(it.items)
-            Log.d("develop", "list: ${it.items.size}")
         }
 
         viewModel.isLoading.observe(viewLifecycleOwner) { isLoading ->

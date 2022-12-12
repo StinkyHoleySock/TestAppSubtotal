@@ -1,10 +1,12 @@
 package com.example.testappsubtotal.ui.list
 
+import android.content.Context
 import android.util.Log
 import android.view.LayoutInflater
 import android.view.ViewGroup
 import androidx.recyclerview.widget.RecyclerView
-import coil.load
+import com.bumptech.glide.Glide
+import com.example.testappsubtotal.R
 import com.example.testappsubtotal.databinding.ItemBookBinding
 import com.example.testappsubtotal.model.Items
 
@@ -26,6 +28,7 @@ class BooksAdapter(
 
     override fun onBindViewHolder(holder: ViewHolder, position: Int) {
         holder.bind(list[position])
+
     }
 
     inner class ViewHolder(private val binding: ItemBookBinding) :
@@ -39,8 +42,13 @@ class BooksAdapter(
                 tvDescription.text = response.volumeInfo?.description
                 tvTitle.text = response.volumeInfo?.title
                 val imageLink = response.volumeInfo?.imageLinks?.thumbnail
-                ivBook.load(imageLink)
                 Log.d("develop", "link: $imageLink")
+
+                Glide.with(ivBook.context)
+                    .load(imageLink)
+                    .error(R.drawable.ic_launcher_background)
+                    .into(ivBook)
+
                 clContainer.setOnClickListener {
                     Log.d("develop", "item: ${binding.tvTitle.text}")
                     bookClickListener(response)

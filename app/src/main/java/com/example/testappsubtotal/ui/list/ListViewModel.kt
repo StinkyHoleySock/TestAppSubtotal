@@ -11,6 +11,7 @@ import com.example.testappsubtotal.data.repository.BooksRepositoryImpl
 import com.example.testappsubtotal.model.Books
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.launch
+import retrofit2.http.Query
 import javax.inject.Inject
 
 @HiltViewModel
@@ -23,15 +24,18 @@ class ListViewModel @Inject constructor(private val repository: BooksRepositoryI
 
     init {
         Log.d("develop", "init")
-        getBooksList()
     }
 
-    private fun getBooksList() {
+    fun getBooksList(query: String) {
+        _isLoading.value = true
         viewModelScope.launch {
-            _isLoading.value = true
-            val response = repository.getBooksList()
-            _booksList.value = response.body()
+            if (query.isNotEmpty()) {
+                val response = repository.getBooksList(query)
+                _booksList.value = response.body()
+            } else {
+                _booksList.value = Books()
+            }
+            _isLoading.value = false
         }
-        _isLoading.value = false
     }
 }

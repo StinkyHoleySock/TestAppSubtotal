@@ -4,6 +4,6 @@ import com.example.testappsubtotal.model.Books
 import retrofit2.Response
 
 interface BooksRepository {
-    suspend fun getBooksList(): Response<Books>
+    suspend fun getBooksList(query: String): Response<Books>
 }
 
