@@ -4,4 +4,6 @@
     <string name="author">Author</string>
     <string name="title">Title</string>
     <string name="check_the_connection">Please, check your internet connection</string>
+    <string name="publisher">Publisher</string>
+    <string name="no_results">No results</string>
 </resources>

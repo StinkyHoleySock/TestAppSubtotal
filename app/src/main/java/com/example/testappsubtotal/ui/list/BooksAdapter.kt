@@ -1,7 +1,5 @@
 package com.example.testappsubtotal.ui.list
 
-import android.content.Context
-import android.util.Log
 import android.view.LayoutInflater
 import android.view.ViewGroup
 import androidx.recyclerview.widget.RecyclerView
@@ -42,15 +40,13 @@ class BooksAdapter(
                 tvDescription.text = response.volumeInfo?.description
                 tvTitle.text = response.volumeInfo?.title
                 val imageLink = response.volumeInfo?.imageLinks?.thumbnail
-                Log.d("develop", "link: $imageLink")
 
                 Glide.with(ivBook.context)
                     .load(imageLink)
-                    .error(R.drawable.ic_launcher_background)
+                    .error(R.drawable.ic_empty_data)
                     .into(ivBook)
 
                 clContainer.setOnClickListener {
-                    Log.d("develop", "item: ${binding.tvTitle.text}")
                     bookClickListener(response)
                 }
             }

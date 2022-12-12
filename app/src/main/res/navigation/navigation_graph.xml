@@ -16,8 +16,10 @@
         android:id="@+id/detailsFragment"
         android:name="com.example.testappsubtotal.ui.details.DetailsFragment"
         android:label="DetailsFragment" >
-        <argument
-            android:name="id"
-            app:argType="string" />
+        <argument android:name="title" app:argType="string" />
+        <argument android:name="authors" app:argType="string" />
+        <argument android:name="date" app:argType="string" />
+        <argument android:name="imageLink" app:argType="string" />
+        <argument android:name="description" app:argType="string" />
     </fragment>
 </navigation>

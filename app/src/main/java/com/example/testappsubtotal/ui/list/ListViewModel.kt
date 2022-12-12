@@ -18,6 +18,10 @@ class ListViewModel @Inject constructor(private val repository: BooksRepositoryI
     private val _isLoading = MutableLiveData<Boolean>()
     val isLoading: LiveData<Boolean> get() = _isLoading
 
+    init {
+        getBooksList("android")
+    }
+
     fun getBooksList(query: String) {
         _isLoading.value = true
         viewModelScope.launch {
