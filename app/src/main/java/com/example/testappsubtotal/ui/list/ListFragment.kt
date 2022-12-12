@@ -98,11 +98,11 @@ class ListFragment : Fragment(R.layout.fragment_list) {
     }
 
     private fun navigateToBooksDetails(item: Items) {
-        val title = item.volumeInfo?.title ?: "No title"
+        val title = item.volumeInfo?.title ?: "Title not found"
         val authorsList = item.volumeInfo?.authors
-        val authors = authorsList?.joinToString(", ") ?: "No authors"
-        val date = item.volumeInfo?.publishedDate ?: "Unknown date"
-        val description = item.volumeInfo?.description ?: "No description"
+        val authors = authorsList?.joinToString(", ") ?: "Authors not found"
+        val date = item.volumeInfo?.publishedDate ?: "Date not found"
+        val description = item.volumeInfo?.description ?: "Description not found"
         val imageLink = item.volumeInfo?.imageLinks?.thumbnail ?: ""
 
         val action = ListFragmentDirections.actionListFragmentToDetailsFragment(

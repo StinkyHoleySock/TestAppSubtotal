@@ -2,6 +2,7 @@ package com.example.testappsubtotal.di
 
 import com.example.testappsubtotal.data.api.BookApiService
 import com.example.testappsubtotal.data.repository.BooksRepositoryImpl
+import com.example.testappsubtotal.utils.Constants
 import dagger.Module
 import dagger.Provides
 import dagger.hilt.InstallIn
@@ -18,7 +19,7 @@ object AppModule {
     @Singleton
     fun provideApi(): BookApiService {
         return Retrofit.Builder()
-            .baseUrl("https://www.googleapis.com/books/v1/volumes/")
+            .baseUrl(Constants.BASE_URL)
             .addConverterFactory(GsonConverterFactory.create())
             .build()
             .create(BookApiService::class.java)

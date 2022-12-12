@@ -26,7 +26,6 @@ class BooksAdapter(
 
     override fun onBindViewHolder(holder: ViewHolder, position: Int) {
         holder.bind(list[position])
-
     }
 
     inner class ViewHolder(private val binding: ItemBookBinding) :
@@ -35,10 +34,10 @@ class BooksAdapter(
         fun bind(response: Items) {
             with(binding) {
                 val authors = response.volumeInfo?.authors ?: listOf()
-                tvAuthor.text = if (authors.isNotEmpty()) authors[0] else "No authors found"
-                tvDate.text = response.volumeInfo?.publishedDate
-                tvDescription.text = response.volumeInfo?.description
-                tvTitle.text = response.volumeInfo?.title
+                tvAuthor.text = if (authors.isNotEmpty()) authors[0] else "Authors not found"
+                tvDate.text = response.volumeInfo?.publishedDate ?: "Date not found"
+                tvDescription.text = response.volumeInfo?.description ?: "Description not found"
+                tvTitle.text = response.volumeInfo?.title ?: "Title not found"
                 val imageLink = response.volumeInfo?.imageLinks?.thumbnail
 
                 Glide.with(ivBook.context)
